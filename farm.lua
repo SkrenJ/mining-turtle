@@ -55,13 +55,14 @@ end
 function goLane(length, forward)
     print("goLane activated. forward = ", forward)
     for x = 0, length do
-        farmCrop("minecraft:wheat", 7, 1, 1)
-        farmCrop("thermal:tomato", 10, 2, 1)
-        farmCrop("thermal:corn", 9, 3, 2)
-        farmCrop("thermal:eggplant", 10, 4, 1)
+        farmCrop("minecraft:wheat",     7, 1, 1)
+        farmCrop("thermal:tomato",     10, 2, 1)
+        farmCrop("thermal:corn",        9, 3, 2)
+        farmCrop("thermal:eggplant",   10, 4, 1)
+        farmCrop("thermal:peanut",     10, 5, 1)
 
         print("x = ", x)
-        
+
         if x < length then
             turtle.forward()
         end
@@ -93,6 +94,7 @@ function farmCrop(cropName, matureAge, seedSlot, height)
         local success, blockInfo = turtle.inspectDown()
         if success and blockInfo.name == cropName then
             if blockInfo.state.age == matureAge then
+                print("dig")
                 turtle.digDown()
             else
                 break -- Schleife abbrechen, wenn die Pflanze nicht reif ist
