@@ -1,6 +1,6 @@
 -- Funktion zum Ernten und Pflanzen von Weizen auf einem Feld
 function farmField()
-    local startX, startZ = gps.locate() -- Startposition ermitteln
+    local startX, startY, startZ = gps.locate() -- Startposition ermitteln
 
     for z = 0, 8 do                     -- Schleife über die Z-Achse (9 Blöcke)
         for x = 0, 8 do                 -- Schleife über die X-Achse (9 Blöcke)
@@ -8,7 +8,7 @@ function farmField()
             local targetZ = startZ + z
 
             -- Effiziente Bewegung zur nächsten Kachel
-            turtle.goTo(targetX, nil, targetZ) -- Nur x und z ändern, y bleibt gleich
+            turtle.moveTo(targetX, nil, targetZ) -- Nur x und z ändern, y bleibt gleich
 
             farmWheat()                    -- Weizen auf der aktuellen Kachel bearbeiten
         end
@@ -19,7 +19,7 @@ function farmField()
     end
 
     -- Zurück zur Startposition
-    turtle.goTo(startX, nil, startZ)
+    turtle.moveTo(startX, nil, startZ)
 end
 
 function farmWheat()
@@ -42,6 +42,39 @@ function farmWheat()
         print("Kein Block gefunden")
     end
 end
+
+-- Funktion zur manuellen Bewegung der Turtle
+function moveTo(targetX, targetZ)
+    local currentX, currentZ = gps.locate()
+  
+    -- Bewegung in X-Richtung
+    while currentX ~= targetX do
+      if currentX < targetX then
+        if not turtle.forward() then return false end  -- Bewege dich vorwärts, falls möglich
+        currentX = currentX + 1
+      else
+        if not turtle.back() then return false end  -- Bewege dich rückwärts, falls möglich
+        currentX = currentX - 1
+      end
+    end
+  
+    -- Bewegung in Z-Richtung
+    while currentZ ~= targetZ do
+      if currentZ < targetZ then
+        turtle.turnRight()
+        if not turtle.forward() then return false end
+        turtle.turnLeft()
+        currentZ = currentZ + 1
+      else
+        turtle.turnLeft()
+        if not turtle.forward() then return false end
+        turtle.turnRight()
+        currentZ = currentZ - 1
+      end
+    end
+  
+    return true  -- Bewegung erfolgreich abgeschlossen
+  end
 
 -- Hauptprogramm
 while true do
