@@ -56,6 +56,8 @@ function farmField()
 
 -- Funktion zum Ernten und Pflanzen einer bestimmten Pflanze
 function farmCrop(cropName, matureAge, seedSlot, height)
+    local currentY = 0 -- Variable to keep track of the current Y level
+  
     for i = 1, height do
       local success, blockInfo = turtle.inspectDown()
       if success and blockInfo.name == cropName then
@@ -63,18 +65,29 @@ function farmCrop(cropName, matureAge, seedSlot, height)
           turtle.digDown()
         end
       end
-      if i < height then
+  
+      -- Move up only if not already at the top
+      if i < height and currentY < height - 1 then 
         turtle.up()
+        currentY = currentY + 1
       end
     end
+  
     turtle.select(seedSlot)
     turtle.placeDown()
+  
+    -- Move down to the original Y level
+    for i = 1, currentY do
+      turtle.down()
+    end
+  
     for i = 1, height - 1 do
       turtle.up()
       turtle.placeUp()
     end
     print(cropName .. " geerntet und neu gepflanzt")
   end
+  
 
 -- Funktion zur manuellen Bewegung der Turtle
 function moveTo(targetX, targetZ)
