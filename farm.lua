@@ -5,6 +5,7 @@ function farmField()
     local forward = true
 
     for z = 0, 8 do
+        stepsX = 0 -- Zähler für X-Richtung am Anfang jeder Reihe zurücksetzen
         for x = 0, 8 do
             farmCrop("minecraft:wheat", 7, 1, 1)
             farmCrop("thermal:tomato", 10, 2, 1)
