@@ -1,33 +1,43 @@
 -- Funktion zum Ernten und Pflanzen von Weizen auf einem Feld
 function farmField()
-    local startX, startZ = nil, nil -- Initialisiere startX und startZ mit nil
-
-    -- Warte, bis eine gültige Position ermittelt wurde
-    while startX == nil or startZ == nil do
-        startX, startZ = gps.locate()
-        print("pinged")
-        sleep(1)        -- Warte 1 Sekunde, bevor erneut versucht wird
-    end
-
-    for z = 0, 8 do     -- Schleife über die Z-Achse (9 Blöcke)
-        for x = 0, 8 do -- Schleife über die X-Achse (9 Blöcke)
-            local targetX = startX + x
-            local targetZ = startZ + z
-
-            -- Effiziente Bewegung zur nächsten Kachel
-            turtle.moveTo(targetX, nil, targetZ) -- Nur x und z ändern, y bleibt gleich
-
-            farmWheat()                          -- Weizen auf der aktuellen Kachel bearbeiten
+    local stepsX = 0  -- Zähler für Schritte in X-Richtung
+    local stepsZ = 0  -- Zähler für Schritte in Z-Richtung
+  
+    for z = 0, 8 do  -- Schleife über die Z-Achse (9 Blöcke)
+      for x = 0, 8 do  -- Schleife über die X-Achse (9 Blöcke)
+        farmWheat()  -- Weizen auf der aktuellen Kachel bearbeiten
+  
+        -- Schritte in X-Richtung zählen
+        if x < 8 then
+          turtle.forward()
+          stepsX = stepsX + 1
         end
-
-        -- Optimierung: Nach jeder Reihe in Z-Richtung wenden, um die nächste Reihe in umgekehrter Richtung abzufahren
+      end
+  
+      -- Schritte in Z-Richtung zählen und wenden
+      if z < 8 then
         turtle.turnRight()
-        turtle.turnRight()
+        turtle.forward()
+        turtle.turnLeft()
+        stepsZ = stepsZ + 1
+      end
+  
+      -- Optimierung: Nach jeder Reihe in Z-Richtung wenden, um die nächste Reihe in umgekehrter Richtung abzufahren
+      turtle.turnRight()
+      turtle.turnRight()
     end
-
+  
     -- Zurück zur Startposition
-    turtle.moveTo(startX, nil, startZ)
-end
+    for i = 1, stepsZ do  -- Schritte in Z-Richtung rückgängig machen
+      turtle.turnLeft()
+      turtle.forward()
+      turtle.turnRight()
+    end
+  
+    for i = 1, stepsX do  -- Schritte in X-Richtung rückgängig machen
+      turtle.back()
+    end
+  end
 
 function farmWheat()
     local success, blockInfo = turtle.inspectDown()
