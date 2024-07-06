@@ -4,9 +4,10 @@ function testen()
 
     if success then
         print("erfolg!")
+        print(blockInfo.name)
     end
 
-    print(blockInfo.name)
+    
 
     for i = 1, 4 do
         print("Hallo Welt, ", i)
