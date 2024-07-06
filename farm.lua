@@ -1,82 +1,79 @@
--- Funktion zum Ernten und Pflanzen von Weizen auf einem Feld
+-- Funktion zum Ernten und Pflanzen von Weizen, Tomaten oder Mais auf einem Feld
 function farmField()
-    local stepsX = 0         -- Zähler für Schritte in X-Richtung
-    local stepsZ = 0         -- Zähler für Schritte in Z-Richtung
-    local forward = true     -- Richtung der Bewegung in X-Richtung (true = vorwärts, false = rückwärts)
-
-    for z = 0, 8 do          -- Schleife über die Z-Achse (9 Blöcke)
-        for x = 0, 8 do      -- Schleife über die X-Achse (9 Blöcke)
-            farmCrop("minecraft:wheat", 7, 1)  -- Weizen ernten und pflanzen
-            farmCrop("thermal:tomato", 10, 2)  -- Tomaten ernten und pflanzen
-            farmCrop("thermal:corn", 9, 3)  -- Tomaten ernten und pflanzen
-
-      
-            -- Schritte in X-Richtung zählen und bewegen
-            if x < 8 then
-                if forward then
-                    turtle.forward()
-                    stepsX = stepsX + 1
-                else
-                    turtle.back()
-                    stepsX = stepsX - 1
-                end
-            end
-        end
-
-        -- Schritte in Z-Richtung zählen und bewegen
-        if z < 8 then
-            turtle.turnRight()
+    local stepsX = 0  -- Zähler für Schritte in X-Richtung
+    local stepsZ = 0  -- Zähler für Schritte in Z-Richtung
+    local forward = true  -- Richtung der Bewegung in X-Richtung (true = vorwärts, false = rückwärts)
+  
+    for z = 0, 8 do  -- Schleife über die Z-Achse (9 Blöcke)
+      for x = 0, 8 do  -- Schleife über die X-Achse (9 Blöcke)
+        farmCrop("minecraft:wheat", 7, 1, 1)  -- Weizen ernten und pflanzen
+        farmCrop("thermal:tomato", 10, 2, 1)  -- Tomaten ernten und pflanzen
+        farmCrop("thermal:corn", 9, 3, 2)     -- Mais ernten und pflanzen
+        farmCrop("thermal:eggplant", 10, 4, 1) -- Auberginen ernten und pflanzen
+  
+        -- Schritte in X-Richtung zählen und bewegen
+        if x < 8 then
+          if forward then
             turtle.forward()
-            turtle.turnLeft()
-            stepsZ = stepsZ + 1
+            stepsX = stepsX + 1
+          else
+            turtle.back()
+            stepsX = stepsX - 1
+          end
         end
-
-        -- Richtung der Bewegung in X-Richtung umkehren
-        forward = not forward
-    end
-
-    -- Zurück zur Startposition
-    for i = 1, stepsZ do     -- Schritte in Z-Richtung rückgängig machen
-        turtle.turnLeft()
+      end
+  
+      -- Schritte in Z-Richtung zählen und bewegen
+      if z < 8 then
+        turtle.turnRight()
         turtle.forward()
-        turtle.turnRight()
+        turtle.turnLeft()
+        stepsZ = stepsZ + 1
+      end
+  
+      -- Richtung der Bewegung in X-Richtung umkehren
+      forward = not forward
     end
-
+  
+    -- Zurück zur Startposition
+    for i = 1, stepsZ do  -- Schritte in Z-Richtung rückgängig machen
+      turtle.turnLeft()
+      turtle.forward()
+      turtle.turnRight()
+    end
+  
     -- Schritte in X-Richtung rückgängig machen (in umgekehrter Richtung)
-    if not forward then     -- Wenn die letzte Bewegung rückwärts war, jetzt vorwärts fahren
-        turtle.turnRight()
-        turtle.turnRight()
+    if not forward then  -- Wenn die letzte Bewegung rückwärts war, jetzt vorwärts fahren
+      turtle.turnRight()
+      turtle.turnRight()
     end
     for i = 1, stepsX do
-        turtle.forward()
+      turtle.forward()
     end
-
-    turtle.turnRight()
-    turtle.turnRight()
-end
+  end
 
 
 
 -- Funktion zum Ernten und Pflanzen einer bestimmten Pflanze
-function farmCrop(cropName, matureAge, seedSlot)
-    local success, blockInfo = turtle.inspectDown()
-  
-    if success then
-      if blockInfo.name == cropName then
+function farmCrop(cropName, matureAge, seedSlot, height)
+    for i = 1, height do
+      local success, blockInfo = turtle.inspectDown()
+      if success and blockInfo.name == cropName then
         if blockInfo.state.age == matureAge then
           turtle.digDown()
-          turtle.select(seedSlot)
-          turtle.placeDown()
-          print(cropName .. " geerntet und neu gepflanzt")
-        else
-          print(cropName .. " wächst noch...")
         end
-      else
-        print("Kein " .. cropName .. " gefunden")
       end
-    else
-      print("Kein Block gefunden")
+      if i < height then
+        turtle.up()
+      end
     end
+    turtle.select(seedSlot)
+    turtle.placeDown()
+    for i = 1, height - 1 do
+      turtle.up()
+      turtle.placeUp()
+    end
+    print(cropName .. " geerntet und neu gepflanzt")
   end
 
 -- Funktion zur manuellen Bewegung der Turtle
