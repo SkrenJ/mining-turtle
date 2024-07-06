@@ -62,11 +62,7 @@ function goLane(length, forward)
 
         if x < length then
             print("x = ", x)
-            if forward then
-                turtle.forward()
-            else
-                turtle.back()
-            end
+            turtle.forward()
         end
     end
 end
