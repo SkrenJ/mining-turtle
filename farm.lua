@@ -59,40 +59,46 @@ end
 -- Funktion zum Ernten und Pflanzen einer bestimmten Pflanze
 function farmCrop(cropName, matureAge, seedSlot, height)
     local currentY = 0 -- Variable to keep track of the current Y level
-
+  
+    -- Ernten
     for i = 1, height do
-        local success, blockInfo = turtle.inspectDown()
-        if success and blockInfo.name == cropName then
-            if blockInfo.state.age == matureAge then
-                turtle.digDown()
-                currentY = currentY + 1 -- Nach dem Ernten nach oben bewegen
-            else
-                break             -- Schleife abbrechen, wenn die Pflanze nicht reif ist
-            end
+      local success, blockInfo = turtle.inspectDown()
+      if success and blockInfo.name == cropName then
+        if blockInfo.state.age == matureAge then
+          turtle.digDown()
+        else
+          break  -- Schleife abbrechen, wenn die Pflanze nicht reif ist
         end
-        if i < height and currentY < height - 1 then
-            turtle.up()
-            currentY = currentY + 1
-        end
+      else
+        break -- Schleife abbrechen, wenn kein Block oder falscher Block gefunden wurde
+      end
+  
+      -- Nach oben bewegen, wenn es noch höhere Blöcke gibt
+      if i < height then
+        turtle.up()
+        currentY = currentY + 1 -- Y-Position aktualisieren
+      end
     end
-
-    -- Nur pflanzen, wenn die Pflanze geerntet wurde (d.h. die Schleife nicht vorzeitig abgebrochen wurde)
-    if i == height then
-        turtle.select(seedSlot)
-        turtle.placeDown()
-
-        -- Move down to the original Y level
-        for i = 1, currentY do
-            turtle.down()
-        end
-
-        for i = 1, height - 1 do
-            turtle.up()
-            turtle.placeUp()
-        end
-        print(cropName .. " geerntet und neu gepflanzt")
+  
+    -- Pflanzen (nur wenn alle Blöcke der Pflanze geerntet wurden)
+    if currentY == height - 1 then -- Überprüfen, ob alle Blöcke geerntet wurden
+      turtle.select(seedSlot)
+      turtle.placeDown()
+  
+      -- Nach unten bewegen und restliche Samen pflanzen
+      for i = 1, height - 1 do
+        turtle.down()
+        turtle.placeUp()
+      end
+      print(cropName .. " geerntet und neu gepflanzt")
+    else
+      -- Zurück zur ursprünglichen Höhe, wenn nicht alle Blöcke geerntet wurden
+      for i = 1, currentY do
+        turtle.down()
+      end
     end
-end
+  end
+  
 
 -- Hauptprogramm
 while true do
