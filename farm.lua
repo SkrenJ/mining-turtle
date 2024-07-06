@@ -1,56 +1,73 @@
 -- Funktion zum Ernten und Pflanzen von Weizen, Tomaten oder Mais auf einem Feld
 function farmField()
-    local stepsX = 0                               -- Zähler für Schritte in X-Richtung
-    local stepsZ = 0                               -- Zähler für Schritte in Z-Richtung
-    local forward = true                           -- Richtung der Bewegung in X-Richtung (true = vorwärts, false = rückwärts)
-
-    for z = 0, 8 do                                -- Schleife über die Z-Achse (9 Blöcke)
-        for x = 0, 8 do                            -- Schleife über die X-Achse (9 Blöcke)
-            farmCrop("minecraft:wheat", 7, 1, 1)   -- Weizen ernten und pflanzen
-            farmCrop("thermal:tomato", 10, 2, 1)   -- Tomaten ernten und pflanzen
-            farmCrop("thermal:corn", 9, 3, 2)      -- Mais ernten und pflanzen
-            farmCrop("thermal:eggplant", 10, 4, 1) -- Auberginen ernten und pflanzen
-
-            -- Schritte in X-Richtung zählen und bewegen
-            if x < 8 then
-                if forward then
-                    turtle.forward()
-                    stepsX = stepsX + 1
-                else
-                    turtle.back()
-                    stepsX = stepsX - 1
-                end
-            end
-        end
-
-        -- Schritte in Z-Richtung zählen und bewegen
-        if z < 8 then
-            turtle.turnRight()
+    local stepsX = 0  
+    local stepsZ = 0  
+    local forward = true  
+  
+    for z = 0, 8 do
+      for x = 0, 8 do  
+        farmCrop("minecraft:wheat", 7, 1, 1)  
+        farmCrop("thermal:tomato", 10, 2, 1) 
+        farmCrop("thermal:corn", 9, 3, 2)     
+        farmCrop("thermal:eggplant", 10, 4, 1) 
+  
+        -- Schritte in X-Richtung zählen und bewegen (nur wenn nicht am Ende der Reihe)
+        if x < 8 then 
+          if forward then
             turtle.forward()
-            turtle.turnLeft()
-            stepsZ = stepsZ + 1
+            stepsX = stepsX + 1
+          else
+            turtle.back()
+            stepsX = stepsX - 1
+          end
         end
-
-        -- Richtung der Bewegung in X-Richtung umkehren
-        forward = not forward
-    end
-
-    -- Zurück zur Startposition
-    for i = 1, stepsZ do -- Schritte in Z-Richtung rückgängig machen
-        turtle.turnLeft()
+      end
+  
+      -- Richtung der Bewegung in X-Richtung umkehren
+      forward = not forward
+  
+      -- Schritte in Z-Richtung zählen und bewegen (nur wenn nicht am Ende des Feldes)
+      if z < 8 then 
+        if forward then -- Wenn vorwärts, nach rechts drehen
+          turtle.turnRight()
+        else -- Wenn rückwärts, nach links drehen
+          turtle.turnLeft()
+        end
         turtle.forward()
-        turtle.turnRight()
+        if forward then -- Wenn vorwärts, nach links drehen
+          turtle.turnLeft()
+        else -- Wenn rückwärts, nach rechts drehen
+          turtle.turnRight()
+        end
+        stepsZ = stepsZ + 1
+      end
     end
-
+  
+    -- Zurück zur Startposition
+    for i = 1, stepsZ do  
+      if forward then -- Wenn vorwärts, nach links drehen
+        turtle.turnLeft()
+      else -- Wenn rückwärts, nach rechts drehen
+        turtle.turnRight()
+      end
+      turtle.forward()
+      if forward then -- Wenn vorwärts, nach rechts drehen
+        turtle.turnRight()
+      else -- Wenn rückwärts, nach links drehen
+        turtle.turnLeft()
+      end
+    end
+  
     -- Schritte in X-Richtung rückgängig machen (in umgekehrter Richtung)
-    if not forward then -- Wenn die letzte Bewegung rückwärts war, jetzt vorwärts fahren
-        turtle.turnRight()
-        turtle.turnRight()
+    if not forward then
+      turtle.turnRight()
+      turtle.turnRight()
     end
     for i = 1, stepsX do
-        turtle.forward()
+      turtle.forward()
     end
-end
+  end
+  
 
 -- Funktion zum Ernten und Pflanzen einer bestimmten Pflanze
 function farmCrop(cropName, matureAge, seedSlot, height)
