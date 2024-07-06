@@ -5,9 +5,10 @@ function farmField()
     -- Warte, bis eine gültige Position ermittelt wurde
     while startX == nil or startZ == nil do
         startX, startZ = gps.locate()
+        print("pinged")
         sleep(1)        -- Warte 1 Sekunde, bevor erneut versucht wird
     end
-    
+
     for z = 0, 8 do     -- Schleife über die Z-Achse (9 Blöcke)
         for x = 0, 8 do -- Schleife über die X-Achse (9 Blöcke)
             local targetX = startX + x
