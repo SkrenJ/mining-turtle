@@ -16,9 +16,11 @@ function farmField()
             if x < 8 then
                 if forward then
                     turtle.forward()
+                    print("vor")
                     stepsX = stepsX + 1
                 else
                     turtle.back()
+                    print("rück")
                     stepsX = stepsX - 1
                 end
             end
@@ -143,5 +145,6 @@ end
 
 while true do
     farmField()
+    print("zZzZzZz...")
     sleep(10) -- Wartezeit zwischen den Durchläufen
 end
