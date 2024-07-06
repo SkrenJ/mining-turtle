@@ -1,43 +1,70 @@
 -- Funktion zum Ernten und Pflanzen von Weizen auf einem Feld
 function farmField()
-    local stepsX = 0  -- Zähler für Schritte in X-Richtung
-    local stepsZ = 0  -- Zähler für Schritte in Z-Richtung
-  
-    for z = 0, 8 do  -- Schleife über die Z-Achse (9 Blöcke)
-      for x = 0, 8 do  -- Schleife über die X-Achse (9 Blöcke)
-        farmWheat()  -- Weizen auf der aktuellen Kachel bearbeiten
-  
-        -- Schritte in X-Richtung zählen
-        if x < 8 then
-          turtle.forward()
-          stepsX = stepsX + 1
+    local stepsX = 0         -- Zähler für Schritte in X-Richtung
+    local stepsZ = 0         -- Zähler für Schritte in Z-Richtung
+    local forward = true     -- Richtung der Bewegung in X-Richtung (true = vorwärts, false = rückwärts)
+
+    for z = 0, 8 do          -- Schleife über die Z-Achse (9 Blöcke)
+        for x = 0, 8 do      -- Schleife über die X-Achse (9 Blöcke)
+            farmWheat()      -- Weizen auf der aktuellen Kachel bearbeiten
+
+            -- Schritte in X-Richtung zählen und bewegen
+            if x < 8 then
+                if forward then
+                    turtle.forward()
+                    stepsX = stepsX + 1
+                else
+                    turtle.back()
+                    stepsX = stepsX - 1
+                end
+            end
         end
-      end
-  
-      -- Schritte in Z-Richtung zählen und wenden
-      if z < 8 then
-        turtle.turnRight()
-        turtle.forward()
-        turtle.turnLeft()
-        stepsZ = stepsZ + 1
-      end
-  
-      -- Optimierung: Nach jeder Reihe in Z-Richtung wenden, um die nächste Reihe in umgekehrter Richtung abzufahren
-      turtle.turnRight()
-      turtle.turnRight()
+
+        -- Schritte in Z-Richtung zählen und bewegen
+        if z < 8 then
+            turtle.turnRight()
+            turtle.forward()
+            turtle.turnLeft()
+            stepsZ = stepsZ + 1
+        end
+
+        -- Richtung der Bewegung in X-Richtung umkehren
+        forward = not forward
     end
-  
+
     -- Zurück zur Startposition
-    for i = 1, stepsZ do  -- Schritte in Z-Richtung rückgängig machen
-      turtle.turnLeft()
-      turtle.forward()
-      turtle.turnRight()
+    for i = 1, stepsZ do     -- Schritte in Z-Richtung rückgängig machen
+        turtle.turnLeft()
+        turtle.forward()
+        turtle.turnRight()
     end
-  
-    for i = 1, stepsX do  -- Schritte in X-Richtung rückgängig machen
-      turtle.back()
+
+    -- Schritte in X-Richtung rückgängig machen (in umgekehrter Richtung)
+    if not forward then     -- Wenn die letzte Bewegung rückwärts war, jetzt vorwärts fahren
+        turtle.turnRight()
+        turtle.turnRight()
     end
-  end
+    for i = 1, stepsX do
+        turtle.forward()
+    end
+end
+
+--     local stepsX = 0    -- Zähler für Schritte in X-Richtung
+--     local stepsZ = 0    -- Zähler für Schritte in Z-Richtung
+
+--     for z = 1, 9 do     -- Schleife über die Z-Achse (9 Blöcke)
+--         for x = 1, 9 do -- Schleife über die X-Achse (9 Blöcke)
+--             farmWheat() -- Weizen auf der aktuellen Kachel bearbeiten
+--             -- Wenn das Feld nicht das letzte Feld ist
+--             -- Laufe einen Schritt nach vorne
+--             -- Wenn es aber das letzte ist
+--             -- Wenn die Reihenzahl gerade ist
+--             -- Drehe dich nach links
+--             -- Wenn sie ungerade ist
+--             -- Drehe dich nach rechts
+--         end
+--     end
+-- end
 
 function farmWheat()
     local success, blockInfo = turtle.inspectDown()
@@ -94,6 +121,7 @@ function moveTo(targetX, targetZ)
 end
 
 -- Hauptprogramm
+
 while true do
     farmField()
     sleep(10) -- Wartezeit zwischen den Durchläufen
