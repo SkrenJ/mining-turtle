@@ -60,8 +60,9 @@ function goLane(length, forward)
         farmCrop("thermal:corn", 9, 3, 2)
         farmCrop("thermal:eggplant", 10, 4, 1)
 
+        print("x = ", x)
+        
         if x < length then
-            print("x = ", x)
             turtle.forward()
         end
     end
