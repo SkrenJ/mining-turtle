@@ -20,7 +20,12 @@ function farmField()
             end
             stepsZ = stepsZ + 1
         end
+        print("z = ", z)
+        print("stepsZ = ", stepsZ)
+        print("stepsX = ", stepsX)
     end
+
+    print("fertig mit z")
 
     -- Zurück zur Startposition
     for i = 1, stepsZ do
@@ -47,6 +52,7 @@ end
 
 -- Funktion zum Abarbeiten einer Spur
 function goLane(length, forward)
+    print("goLane activated. forward = ", forward)
     for x = 0, length do
         farmCrop("minecraft:wheat", 7, 1, 1)
         farmCrop("thermal:tomato", 10, 2, 1)
@@ -54,6 +60,7 @@ function goLane(length, forward)
         farmCrop("thermal:eggplant", 10, 4, 1)
 
         if x < length then
+            print("x = ", x)
             if forward then
                 turtle.forward()
             else
@@ -65,6 +72,7 @@ end
 
 -- Funktion für eine Rechtskurve
 function rightCurve()
+    print("mache Rechtskurve")
     turtle.turnRight()
     turtle.forward()
     turtle.turnRight()
@@ -72,6 +80,7 @@ end
 
 -- Funktion für eine Linkskurve
 function leftCurve()
+    print("mache Linkskurve")
     turtle.turnLeft()
     turtle.forward()
     turtle.turnLeft()
@@ -124,4 +133,6 @@ end
 while true do
     farmField()
     sleep(10) -- Wartezeit zwischen den Durchläufen
+
+    print("zzzzz")
 end
