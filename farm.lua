@@ -120,7 +120,6 @@ function farmCrop(cropName, matureAge, seedSlot, height)
             turtle.down()
             turtle.placeUp()
         end
-        print(cropName .. " geerntet und neu gepflanzt")
     else
         -- Zurück zur ursprünglichen Höhe, wenn nicht alle Blöcke geerntet wurden
         for i = 1, currentY do
