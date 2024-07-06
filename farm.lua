@@ -1,6 +1,6 @@
 -- Funktion zum Ausgeben der Blockinformationen
 function printBlockInfo()
-    --local success, blockInfo = turtle.inspectDown() -- Informationen über den Block unter der Turtle abrufen
+    local success, blockInfo = turtle.inspectDown() -- Informationen über den Block unter der Turtle abrufen
     print("erhalten")
     -- if success then                                 -- Überprüfen, ob ein Block gefunden wurde
     --     print("name")
