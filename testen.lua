@@ -13,8 +13,6 @@ function testen()
 
     end
 
-    
-
     for i = 1, 4 do
         print("Hallo Welt, ", i)
     end
