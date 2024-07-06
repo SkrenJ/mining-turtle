@@ -8,9 +8,6 @@ function farmField()
         stepsX = 0
         goLane(8, forward) -- Abarbeiten einer Spur (8 Schritte, vorwärts oder rückwärts)
 
-        -- Richtung der Bewegung in X-Richtung umkehren
-        forward = not forward
-
         -- Schritte in Z-Richtung zählen und bewegen (nur wenn nicht am Ende des Feldes)
         if z < 8 then
             if forward then
@@ -20,6 +17,10 @@ function farmField()
             end
             stepsZ = stepsZ + 1
         end
+
+        -- Richtung der Bewegung in X-Richtung umkehren
+        forward = not forward
+
         print("z = ", z)
         print("stepsZ = ", stepsZ)
         print("stepsX = ", stepsX)
