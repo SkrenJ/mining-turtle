@@ -1,16 +1,28 @@
--- Funktion zum Ausgeben der Blockinformationen
-function printBlockInfo()
-    local success, blockInfo = turtle.inspectDown() -- Informationen über den Block unter der Turtle abrufen
-    print("erhalten!")
-    if success then                                 -- Überprüfen, ob ein Block gefunden wurde
-        print("name")
-            print("Name:", blockInfo.name)              -- Name des Blocks ausgeben
-            print("Metadaten:", blockInfo.metadata)     -- Metadaten des Blocks ausgeben (falls vorhanden)
-            -- Blockzustände (nur Minecraft 1.8+) wurden hier entfernt, da sie in den meisten Fällen nicht benötigt werden
+-- Funktion zum Ernten und Pflanzen von Weizen
+function farmWheat()
+    local success, blockInfo = turtle.inspectDown()
+  
+    if success then
+      if blockInfo.name == "minecraft:wheat" then  -- Überprüfen, ob es sich um Weizen handelt
+        if blockInfo.state.age == 7 then  -- Überprüfen, ob der Weizen ausgewachsen ist (age = 7)
+          turtle.digDown()  -- Weizen ernten
+          turtle.select(1)  -- Weitzensamen auswählen (Annahme: Slot 1)
+          turtle.placeDown()  -- Weitzensamen pflanzen
+          print("Weizen geerntet und neu gepflanzt")
         else
-            print("Kein Block gefunden") -- Meldung ausgeben, wenn kein Block unter der Turtle ist
+          print("Weizen wächst noch...")
+        end
+      else
+        print("Kein Weizen gefunden")
+      end
+    else
+      print("Kein Block gefunden")
     end
-end
-
--- Hauptprogramm
-printBlockInfo() -- Funktion aufrufen, um die Blockinformationen auszugeben
+  end
+  
+  -- Hauptprogramm
+  while true do  -- Endlosschleife, um den Weizen kontinuierlich zu überprüfen
+    farmWheat()
+    sleep(10)  -- Wartezeit zwischen den Überprüfungen (in Sekunden)
+  end
+  
