@@ -55,11 +55,11 @@ end
 function goLane(length, forward)
     print("goLane activated. forward = ", forward)
     for x = 0, length do
-        farmCrop("minecraft:wheat",     7, 1, 1)
-        farmCrop("thermal:tomato",     10, 2, 1)
-        farmCrop("thermal:corn",        9, 3, 2)
-        farmCrop("thermal:eggplant",   10, 4, 1)
-        farmCrop("thermal:peanut",     10, 5, 1)
+        farmCrop("minecraft:wheat", 7, 1, 1)
+        farmCrop("thermal:tomato", 10, 2, 1)
+        farmCrop("thermal:corn", 9, 3, 2)
+        farmCrop("thermal:eggplant", 10, 4, 1)
+        farmCrop("thermal:peanut", 10, 5, 1)
 
         print("x = ", x)
 
@@ -103,12 +103,17 @@ function farmCrop(cropName, matureAge, seedSlot, height)
             break -- Schleife abbrechen, wenn kein Block oder falscher Block gefunden wurde
         end
 
+        -- Gegenstände aufnehmen
+        turtle.select(16)        -- Einen leeren Slot auswählen (z.B. den letzten)
+        while turtle.suck() do end -- Alle Gegenstände aufnehmen
+
         -- Nach oben bewegen, wenn es noch höhere Blöcke gibt
         if i < height then
             turtle.up()
             currentY = currentY + 1 -- Y-Position aktualisieren
         end
     end
+
 
     -- Pflanzen (nur wenn alle Blöcke der Pflanze geerntet wurden)
     if currentY == height - 1 then -- Überprüfen, ob alle Blöcke geerntet wurden
