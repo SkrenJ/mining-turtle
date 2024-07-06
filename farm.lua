@@ -8,6 +8,8 @@ function farmField()
         for x = 0, 8 do      -- Schleife über die X-Achse (9 Blöcke)
             farmCrop("minecraft:wheat", 7, 1)  -- Weizen ernten und pflanzen
             farmCrop("thermal:tomato", 10, 2)  -- Tomaten ernten und pflanzen
+            farmCrop("thermal:corn", 9, 3)  -- Tomaten ernten und pflanzen
+
       
             -- Schritte in X-Richtung zählen und bewegen
             if x < 8 then
@@ -48,29 +50,12 @@ function farmField()
     for i = 1, stepsX do
         turtle.forward()
     end
+
+    turtle.turnRight()
+    turtle.turnRight()
 end
 
 
-function farmWheat()
-    local success, blockInfo = turtle.inspectDown()
-
-    if success then
-        if blockInfo.name == "minecraft:wheat" then -- Überprüfen, ob es sich um Weizen handelt
-            if blockInfo.state.age == 7 then        -- Überprüfen, ob der Weizen ausgewachsen ist (age = 7)
-                turtle.digDown()                    -- Weizen ernten
-                turtle.select(1)                    -- Weitzensamen auswählen (Annahme: Slot 1)
-                turtle.placeDown()                  -- Weitzensamen pflanzen
-                print("Weizen geerntet und neu gepflanzt")
-            else
-                print("Weizen wächst noch...")
-            end
-        else
-            print("Kein Weizen gefunden")
-        end
-    else
-        print("Kein Block gefunden")
-    end
-end
 
 -- Funktion zum Ernten und Pflanzen einer bestimmten Pflanze
 function farmCrop(cropName, matureAge, seedSlot)
