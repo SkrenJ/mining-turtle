@@ -8,7 +8,7 @@ function testen()
         print("Metadaten:", blockInfo.metadata)     -- Metadaten des Blocks ausgeben (falls vorhanden)
 
         if blockInfo.state then
-            print(blockInfo.state)
+            print("State: ", blockInfo.state)
         end
 
     end
