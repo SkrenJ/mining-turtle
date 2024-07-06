@@ -5,6 +5,12 @@ function testen()
     if success then
         print("erfolg!")
         print(blockInfo.name)
+        print("Metadaten:", blockInfo.metadata)     -- Metadaten des Blocks ausgeben (falls vorhanden)
+
+        if blockInfo.state then
+            print(blockInfo.state)
+        end
+
     end
 
     
