@@ -20,13 +20,8 @@ function farmField()
 
         -- Richtung der Bewegung in X-Richtung umkehren
         forward = not forward
-
-        print("z = ", z)
-        print("stepsZ = ", stepsZ)
-        print("stepsX = ", stepsX)
     end
 
-    print("fertig mit z")
 
     -- Zurück zur Startposition
     for i = 1, stepsZ do
@@ -53,7 +48,6 @@ end
 
 -- Funktion zum Abarbeiten einer Spur
 function goLane(length, forward)
-    print("goLane activated. forward = ", forward)
     for x = 0, length do
         farmCrop("minecraft:wheat", 7, 1, 1)
         farmCrop("thermal:tomato", 10, 2, 1)
@@ -61,7 +55,6 @@ function goLane(length, forward)
         farmCrop("thermal:eggplant", 10, 4, 1)
         farmCrop("thermal:peanut", 10, 5, 1)
 
-        print("x = ", x)
 
         if x < length then
             turtle.forward()
@@ -71,7 +64,6 @@ end
 
 -- Funktion für eine Rechtskurve
 function rightCurve()
-    print("mache Rechtskurve")
     turtle.turnRight()
     turtle.forward()
     turtle.turnRight()
@@ -79,7 +71,6 @@ end
 
 -- Funktion für eine Linkskurve
 function leftCurve()
-    print("mache Linkskurve")
     turtle.turnLeft()
     turtle.forward()
     turtle.turnLeft()
@@ -94,7 +85,6 @@ function farmCrop(cropName, matureAge, seedSlot, height)
         local success, blockInfo = turtle.inspectDown()
         if success and blockInfo.name == cropName then
             if blockInfo.state.age == matureAge then
-                print("dig")
                 turtle.digDown()
             else
                 break -- Schleife abbrechen, wenn die Pflanze nicht reif ist
@@ -105,7 +95,7 @@ function farmCrop(cropName, matureAge, seedSlot, height)
 
         -- Gegenstände aufnehmen
         turtle.select(16)        -- Einen leeren Slot auswählen (z.B. den letzten)
-        while turtle.suck() do end -- Alle Gegenstände aufnehmen
+        while turtle.suckDown() do end -- Alle Gegenstände aufnehmen
 
         -- Nach oben bewegen, wenn es noch höhere Blöcke gibt
         if i < height then
